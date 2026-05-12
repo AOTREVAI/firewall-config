@@ -12,7 +12,7 @@ $IPT -X
 # IMPOSTA DEFAULT POLICY
 $IPT -P INPUT DROP 
 $IPT -P FORWARD DROP
-$IPT -P OUTPUT ACCEPT#!/bin/bash
+$IPT -P OUTPUT ACCEPT
 
 
 # Kernel setup, abilita il forwarding a livello di kernel
