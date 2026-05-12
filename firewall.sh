@@ -36,10 +36,10 @@ $IPT -A FORWARD -i enp0s3 -o enp0s8 -j PUB-LAN
 $IPT -A FORWARD -i enp0s9 -o enp0s3 -j DMZ-PUB
 $IPT -A FORWARD -i enp0s3 -o enp0s9 -j PUB-DMZ
 # SNAT
-$IPT -t nat -A POSTROUTING -O enp0s3 -s 192.168.10.0/24 -j SNAT --to-source 172.22.202.10
+$IPT -t nat -A POSTROUTING -o enp0s3 -s 192.168.10.0/24 -j SNAT --to-source 172.22.202.10
 
 # INPUT
-# aprire porta per ssh su (i)nterfaccia (s)ource (p)rotocol portadestinazione
+# aprire porta per ssh su (i)nterfacci/a (s)ource (p)rotocol portadestinazione
 $IPT -A INPUT -i enp0s3 -s 172.22.202.102 -p tcp --dport 2222 -j ACCEPT  
 
 # apre la porta per connessioni iniziate da noi e ancora attive
@@ -59,10 +59,10 @@ $IPT -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
 # $IPT -A FORWARD -i enp0s9 -o enp0s8 -s 192.168.10.0/24 -m state --state ESTABLISHED,RELATED -j ACCEPT
 
 #LAN-PUB
-$IPT -A LAN-PUB -s 192.168.10.0/24 -i icmp --icmp-type 8 -j ACCEPT
-$IPT -A LAN-PUB -s 192.168.10.0/24 -i -p tcp --dport 80 -j ACCEPT
-$IPT -A LAN-PUB -s 192.168.10.0/24 -i -p tcp --dport 443 -j ACCEPT
-$IPT -A LAN-PUB -s 192.168.10.0/24 -i -p udp --dport 53 -j ACCEPT
+$IPT -A LAN-PUB -s 192.168.10.0/24 -p icmp --icmp-type 8 -j ACCEPT
+$IPT -A LAN-PUB -s 192.168.10.0/24 -p tcp --dport 80 -j ACCEPT
+$IPT -A LAN-PUB -s 192.168.10.0/24 -p tcp --dport 443 -j ACCEPT
+$IPT -A LAN-PUB -s 192.168.10.0/24 -p udp --dport 53 -j ACCEPT
 
 #PUB-LAN 
 $IPT -A PUB-LAN -d 192.168.10.0/24 -m state --state ESTABLISHED,RELATED -j ACCEPT
