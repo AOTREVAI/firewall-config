@@ -42,7 +42,7 @@ $IPT -t nat -A POSTROUTING -o enp0s3 -s 10.10.14.0/24 -j SNAT --to-source 172.22
 
 # INPUT
 # aprire porta per ssh su (i)nterfacci/a (s)ource (p)rotocol portadestinazione
-$IPT -A INPUT -i enp0s3 -s 172.22.202.102 -p tcp --dport 2222 -j ACCEPT # dipende da indirizzo ip host per ssh 
+$IPT -A INPUT -i enp0s3 -s 172.22.202.119 -p tcp --dport 2222 -j ACCEPT # dipende da indirizzo ip host per ssh 
 
 # apre la porta per connessioni iniziate da noi e ancora attive
 $IPT -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
@@ -68,6 +68,7 @@ $IPT -A PUB-LAN -d 192.168.14.0/24 -m state --state ESTABLISHED,RELATED -j ACCEP
 
 #LAN-DMZ
 $IPT -A LAN-DMZ -s 192.168.14.0/24 -d 10.10.14.0/24 -p icmp --icmp-type 8 -j ACCEPT
+$IPT -A LAN-DMZ -s 192.168.14.0/24 -d 10.10.14.0/24 -p tcp -m multiport --dports 80,443 -j ACCEPT
 
 #DMZ-LAN
 $IPT -A DMZ-LAN -s 192.168.14.0/24 -m state --state ESTABLISHED,RELATED -j ACCEPT
@@ -76,6 +77,8 @@ $IPT -A DMZ-LAN -s 192.168.14.0/24 -m state --state ESTABLISHED,RELATED -j ACCEP
 $IPT -A DMZ-PUB -s 10.10.14.0/24 -p udp --dport 53 -j ACCEPT
 $IPT -A DMZ-PUB -s 10.10.14.0/24 -p tcp --dport 80 -j ACCEPT
 $IPT -A DMZ-PUB -s 10.10.14.0/24 -p tcp --dport 443 -j ACCEPT
+$IPT -A DMZ-PUB -s 10.10.14.0/24 -m state --state ESTABLISHED,RELATED -j ACCEPT 
 
 # PUB-DMZ
 $IPT -A PUB-DMZ -d 10.10.14.0/24 -m state --state ESTABLISHED,RELATED -j ACCEPT
+$IPT -A PUB-DMZ -d 10.10.14.10 -p tcp -m multiport --dports 80,443-j ACCEPT
