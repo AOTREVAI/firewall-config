@@ -40,6 +40,8 @@ $IPT -A FORWARD -i enp0s3 -o enp0s9 -j PUB-DMZ
 $IPT -t nat -A POSTROUTING -o enp0s3 -s 192.168.14.0/24 -j SNAT --to-source 172.22.202.14
 $IPT -t nat -A POSTROUTING -o enp0s3 -s 10.10.14.0/24 -j SNAT --to-source 172.22.202.14
 
+# DNAT 
+$IPT -t nat -A PREROUTING -i enp0s3 -d 172.22.202.10 -p tcp -m multiport --dports 80,443 -j DNAT --to-destination 10.10.14.10
 # INPUT
 # aprire porta per ssh su (i)nterfacci/a (s)ource (p)rotocol portadestinazione
 $IPT -A INPUT -i enp0s3 -s 172.22.202.119 -p tcp --dport 2222 -j ACCEPT # dipende da indirizzo ip host per ssh 
