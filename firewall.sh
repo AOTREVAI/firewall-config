@@ -90,3 +90,4 @@ $IPT -A DMZ-PUB -s 10.10.14.0/24 -m state --state ESTABLISHED,RELATED -j ACCEPT
 # PUB-DMZ
 $IPT -A PUB-DMZ -d 10.10.14.0/24 -m state --state ESTABLISHED,RELATED -j ACCEPT
 $IPT -A PUB-DMZ -d 10.10.14.10 -p tcp -m multiport --dports 80,443 -j ACCEPT
+$IPT -A PUB-DMZ -d 10.10.14.10 -p tcp --dport 21 -j ACCEPT
